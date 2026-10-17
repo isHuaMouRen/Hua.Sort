@@ -18,7 +18,7 @@ public class CocktailShakerSort<T> : ISort<T> where T : INumber<T>
                     array[i] = array[i + 1];
                     array[i + 1] = temp;
                 }
-            }   
+            }
             right--;
             for (i = right; i > left; i--)
             {

@@ -2,7 +2,7 @@
 
 namespace Hua.Sort;
 
-public class InsertionSort<T>:ISort<T> where T:INumber<T>
+public class InsertionSort<T> : ISort<T> where T : INumber<T>
 {
     public void Sort(T[] array)
     {
