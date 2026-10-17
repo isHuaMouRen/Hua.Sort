@@ -2,9 +2,6 @@
 
 namespace Hua.Sort;
 
-/// <summary>
-/// https://zh.wikipedia.org/wiki/%E6%A1%B6%E6%8E%92%E5%BA%8F
-/// </summary>
 public class BucketSort<T> : ISort<T> where T : INumber<T>
 {
     public int BucketCount { get; set; } = 10;

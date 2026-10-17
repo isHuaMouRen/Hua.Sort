@@ -2,9 +2,6 @@
 
 namespace Hua.Sort;
 
-/// <summary>
-/// https://zh.wikipedia.org/wiki/%E9%B8%A1%E5%B0%BE%E9%85%92%E6%8E%92%E5%BA%8F
-/// </summary>
 public class CocktailShakerSort<T> : ISort<T> where T : INumber<T>
 {
     public void Sort(T[] array)

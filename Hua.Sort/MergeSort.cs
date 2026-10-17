@@ -2,9 +2,6 @@
 
 namespace Hua.Sort;
 
-/// <summary>
-/// http://zh.wikipedia.org/wiki/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F
-/// </summary>
 public class MergeSort<T> : ISort<T> where T : INumber<T>
 {
     public void Sort(T[] array)

@@ -1,8 +1,5 @@
 ﻿namespace Hua.Sort;
 
-/// <summary>
-/// https://zh.wikipedia.org/wiki/%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F
-/// </summary>
 public class RadixSort : ISort<int>
 {
     public void Sort(int[] array)
