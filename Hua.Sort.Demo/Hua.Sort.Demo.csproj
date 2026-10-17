@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Hua.Sort\Hua.Sort.csproj" />
+  </ItemGroup>
+
 </Project>
