@@ -1,18 +1,16 @@
-﻿using System.Numerics;
+﻿namespace Hua.Sort;
 
-namespace Hua.Sort;
-
-public class PigeonholeSort<T> : ISort<T> where T : INumber<T>
+public class PigeonholeSort : ISort<int>
 {
-    public void Sort(T[] array)
+    public void Sort(int[] array)
     {
         if (array.Length <= 1)
             return;
 
-        T min = array[0];
-        T max = array[0];
+        int min = array[0];
+        int max = array[0];
 
-        foreach (T value in array)
+        foreach (int value in array)
         {
             if (value < min) min = value;
             if (value > max) max = value;
@@ -24,7 +22,7 @@ public class PigeonholeSort<T> : ISort<T> where T : INumber<T>
 
         var holes = new int[range];
 
-        foreach (T value in array)
+        foreach (int value in array)
         {
             holes[int.CreateChecked(value) - minValue]++;
         }
@@ -35,7 +33,7 @@ public class PigeonholeSort<T> : ISort<T> where T : INumber<T>
         {
             while (holes[i]-- > 0)
             {
-                array[index++] = T.CreateChecked(i + minValue);
+                array[index++] = int.CreateChecked(i + minValue);
             }
         }
     }

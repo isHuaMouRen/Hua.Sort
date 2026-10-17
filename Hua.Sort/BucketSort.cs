@@ -4,7 +4,12 @@ namespace Hua.Sort;
 
 public class BucketSort<T> : ISort<T> where T : INumber<T>
 {
-    public int BucketCount { get; set; } = 10;
+    public required T BucketCount { get; set; }
+
+    public BucketSort(T bucketCount)
+    {
+        BucketCount = bucketCount;
+    }
 
     private class ListNode(T data)
     {

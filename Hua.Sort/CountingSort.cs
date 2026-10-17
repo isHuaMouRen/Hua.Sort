@@ -1,10 +1,8 @@
-﻿using System.Numerics;
+﻿namespace Hua.Sort;
 
-namespace Hua.Sort;
-
-public class CountingSort<T> : ISort<T> where T : INumber<T>
+public class CountingSort : ISort<int>
 {
-    public void Sort(T[] array)
+    public void Sort(int[] array)
     {
         if (array.Length <= 1)
             return;
@@ -12,7 +10,7 @@ public class CountingSort<T> : ISort<T> where T : INumber<T>
         int min = int.CreateChecked(array[0]);
         int max = min;
 
-        foreach (T value in array)
+        foreach (int value in array)
         {
             int number = int.CreateChecked(value);
 
@@ -23,7 +21,7 @@ public class CountingSort<T> : ISort<T> where T : INumber<T>
         int range = checked(max - min + 1);
         var counts = new int[range];
 
-        foreach (T value in array)
+        foreach (int value in array)
         {
             counts[int.CreateChecked(value) - min]++;
         }
@@ -34,7 +32,7 @@ public class CountingSort<T> : ISort<T> where T : INumber<T>
         {
             while (counts[i]-- > 0)
             {
-                array[index++] = T.CreateChecked(i + min);
+                array[index++] = int.CreateChecked(i + min);
             }
         }
     }
