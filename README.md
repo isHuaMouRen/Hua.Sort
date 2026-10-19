@@ -59,7 +59,10 @@ static void Main(string[] args)
 
 ### 不实用的排序
 
-> 命名空间: `Hua.Sort.Unpracical`
+> 命名空间: `Hua.Sort.Impractical`
+
+> [!warn]
+> 以下所有算法均可能永远无法完成排序，仅供娱乐，请勿在生产环境中使用
 
 |算法|类名|支持的类型|
 |-|-|-|

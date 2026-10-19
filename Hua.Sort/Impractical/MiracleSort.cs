@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 
-namespace Hua.Sort.Unpracical;
+namespace Hua.Sort.Impractical;
 
-[Obsolete("MiracleSort can never be completed under normal circumstances and is only suitable for entertainment purposes. Do not use it in a production environment.")]
+[Obsolete("This sorting algorithm will never complete the sorting process under normal circumstances. Do not use it in production environments. It is only for entertainment purposes.")]
 public class MiracleSort<T> : ISort<T> where T : INumber<T>
 {
     public void Sort(T[] array)
