@@ -12,54 +12,6 @@ public class BucketSort<T> : ISort<T> where T : INumber<T>
         BucketCount = bucketCount;
     }
 
-    private class ListNode(T data)
-    {
-        public T Data = data;
-        public ListNode? Next;
-    }
-
-    private static ListNode? Insert(ListNode? head, T value)
-    {
-        var dummy = new ListNode(value) { Next = head };
-        var prev = dummy;
-
-        while (prev.Next is not null &&
-               prev.Next.Data <= value)
-        {
-            prev = prev.Next;
-        }
-
-        prev.Next = new ListNode(value) { Next = prev.Next };
-
-        return dummy.Next;
-    }
-
-    private static ListNode? Merge(ListNode? head1, ListNode? head2)
-    {
-        var dummy = new ListNode(T.Zero);
-        var tail = dummy;
-
-        while (head1 is not null && head2 is not null)
-        {
-            if (head1.Data <= head2.Data)
-            {
-                tail.Next = head1;
-                head1 = head1.Next;
-            }
-            else
-            {
-                tail.Next = head2;
-                head2 = head2.Next;
-            }
-
-            tail = tail.Next;
-        }
-
-        tail.Next = head1 ?? head2;
-
-        return dummy.Next;
-    }
-
     public void Sort(T[] array)
     {
         ArgumentNullException.ThrowIfNull(array);
@@ -93,7 +45,7 @@ public class BucketSort<T> : ISort<T> where T : INumber<T>
                 "The value range cannot be represented reliably as double.",
                 nameof(array));
 
-        var buckets = new ListNode?[BucketCount];
+        var buckets = new List<T>?[BucketCount];
 
         foreach (T value in array)
         {
@@ -105,22 +57,38 @@ public class BucketSort<T> : ISort<T> where T : INumber<T>
             if (index < 0) index = 0;
             if (index >= BucketCount) index = BucketCount - 1;
 
-            buckets[index] = Insert(buckets[index], value);
+            var bucket = buckets[index];
+            if (bucket is null)
+            {
+                bucket = [];
+                buckets[index] = bucket;
+            }
+
+            bucket.Add(value);
         }
 
-        ListNode? head = null;
-
+        int outputIndex = 0;
         foreach (var bucket in buckets)
         {
-            head = Merge(head, bucket);
-        }
+            if (bucket is null)
+                continue;
 
-        int i = 0;
+            for (int i = 1; i < bucket.Count; i++)
+            {
+                T value = bucket[i];
+                int j = i - 1;
 
-        while (head is not null)
-        {
-            array[i++] = head.Data;
-            head = head.Next;
+                while (j >= 0 && bucket[j] > value)
+                {
+                    bucket[j + 1] = bucket[j];
+                    j--;
+                }
+
+                bucket[j + 1] = value;
+            }
+
+            foreach (T value in bucket)
+                array[outputIndex++] = value;
         }
     }
 }
