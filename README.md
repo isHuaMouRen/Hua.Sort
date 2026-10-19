@@ -40,7 +40,7 @@ static void Main(string[] args)
 
 > 稳定的算法在命名空间 `Hua.Sort.Stable` 下，不稳定的则在 `Hua.Sort.Unstable`
 
-|算法|类名|稳定|支持的类型|
+|算法|类名|稳定?|支持的类型|
 |-|-|-|-|
 |冒泡排序| `BubbleSort` | `Yes` | `INumber<T>` |
 |桶排序| `BucketSort` | `Yes` | `INumber<T>` |
@@ -56,3 +56,11 @@ static void Main(string[] args)
 |快速排序| `QuickSort` | `No` | `INumber<T>` |
 |选择排序| `SelectionSort` | `No` | `INumber<T>` |
 |希尔排序| `ShellSort` | `No` | `INumber<T>` |
+
+### 不实用的排序
+
+> 命名空间: `Hua.Sort.Unpracical`
+
+|算法|类名|支持的类型|
+|-|-|-|
+|猴子排序| `BogoSort` | `INumber<T>` |
