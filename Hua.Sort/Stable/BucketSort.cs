@@ -4,10 +4,11 @@ namespace Hua.Sort.Stable;
 
 public class BucketSort<T> : ISort<T> where T : INumber<T>
 {
-    public required int BucketCount { get; set; }
+    public int BucketCount { get; }
 
     public BucketSort(int bucketCount)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(bucketCount);
         BucketCount = bucketCount;
     }
 
@@ -61,6 +62,8 @@ public class BucketSort<T> : ISort<T> where T : INumber<T>
 
     public void Sort(T[] array)
     {
+        ArgumentNullException.ThrowIfNull(array);
+
         if (array.Length <= 1)
             return;
 
@@ -69,6 +72,11 @@ public class BucketSort<T> : ISort<T> where T : INumber<T>
 
         foreach (T value in array)
         {
+            if (!T.IsFinite(value))
+                throw new ArgumentException(
+                    "BucketSort does not support NaN or infinity values.",
+                    nameof(array));
+
             if (value < min) min = value;
             if (value > max) max = value;
         }
@@ -76,11 +84,24 @@ public class BucketSort<T> : ISort<T> where T : INumber<T>
         if (min == max)
             return;
 
+        double minValue = double.CreateChecked(min);
+        double maxValue = double.CreateChecked(max);
+        double range = maxValue - minValue;
+
+        if (!double.IsFinite(range) || range <= 0)
+            throw new ArgumentException(
+                "The value range cannot be represented reliably as double.",
+                nameof(array));
+
         var buckets = new ListNode?[BucketCount];
 
         foreach (T value in array)
         {
-            int index = int.CreateChecked(((value - min) / (max - min)) * T.CreateChecked(BucketCount - 1));
+            double current = double.CreateChecked(value);
+            double ratio = (current - minValue) / range;
+
+            int index = (int)(ratio * BucketCount);
+
             if (index < 0) index = 0;
             if (index >= BucketCount) index = BucketCount - 1;
 
