@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Hua.Sort;
+namespace Hua.Sort.Unstable;
 
 public class SelectionSort<T> : ISort<T> where T : INumber<T>
 {

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Hua.Sort.Stable;
+using System.Diagnostics;
 
 namespace Hua.Sort.Demo;
 

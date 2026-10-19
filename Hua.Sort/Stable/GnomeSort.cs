@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Hua.Sort;
+namespace Hua.Sort.Stable;
 
 public class GnomeSort<T> : ISort<T> where T : INumber<T>
 {

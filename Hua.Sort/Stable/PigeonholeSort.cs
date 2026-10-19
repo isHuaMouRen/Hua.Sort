@@ -1,4 +1,4 @@
-﻿namespace Hua.Sort;
+﻿namespace Hua.Sort.Stable;
 
 public class PigeonholeSort : ISort<int>
 {

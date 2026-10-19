@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Hua.Sort;
+namespace Hua.Sort.Unstable;
 
 public class HeapSort<T> : ISort<T> where T : INumber<T>
 {
