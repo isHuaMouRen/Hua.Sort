@@ -1,15 +1,15 @@
-# Hua.Sort
+# Hua. Sort
 
-**Hua.Sort** 是一个使用 C# 实现的排序算法集合，为多种经典排序算法提供统一的封装接口。
+**Hua. Sort** 是一个使用 C# 实现的排序算法集合，为多种经典排序算法提供统一的封装接口。
 
 ## 使用示例
 
 ### 自行编写代码
 
-引用 `Hua.Sort` 命名空间，创建对应排序算法的实例，并调用 `Sort()` 方法即可。
+引用排序算法所在的命名空间，创建对应排序算法的实例，并调用 `Sort()` 方法即可。
 
 ```csharp
-using Hua.Sort;
+using Hua.Sort.Stable;
 
 static void Main(string[] args)
 {
@@ -30,7 +30,7 @@ static void Main(string[] args)
 
 上述示例使用 `BubbleSort<int>` 进行冒泡排序。你可以将 `BubbleSort` 替换为其他排序算法对应的类名，以使用不同的排序算法。
 
-若算法支持，可以将 `<int>` 替换为其他支持的类型 *( `double` , `float` , `long` ...)* 来进行排序
+若算法支持，可以将 `<int>` 替换为其他支持的类型 *( `double` , `float` , `long` ...)* 来进行排序，具体哪些算法支持请看下方列表
 
 ### 查看 Demo
 
@@ -38,26 +38,21 @@ static void Main(string[] args)
 
 ## 算法列表
 
-### 通用
+> 稳定的算法在命名空间 `Hua.Sort.Stable` 下，不稳定的则在 `Hua.Sort.Unstable`
 
-|算法|类名|
-|-|-|
-|[冒泡排序](https://zh.wikipedia.org/wiki/冒泡排序)| `BubbleSort` |
-|[鸡尾酒排序](https://zh.wikipedia.org/wiki/鸡尾酒排序)| `CocktailShakerSort` |
-|[梳排序](https://zh.wikipedia.org/wiki/梳排序)| `CombSort` |
-|[侏儒排序](https://zh.wikipedia.org/wiki/侏儒排序)| `GnomeSort` |
-|[堆排序](https://zh.wikipedia.org/wiki/堆排序)| `HeapSort` |
-|[插入排序](https://zh.wikipedia.org/wiki/插入排序)| `InsertionSort` |
-|[归并排序](https://zh.wikipedia.org/wiki/归并排序)| `MergeSort` |
-|[快速排序](https://zh.wikipedia.org/wiki/快速排序)| `QuickSort` |
-|[选择排序](https://zh.wikipedia.org/wiki/选择排序)| `SelectionSort` |
-|[希尔排序](https://zh.wikipedia.org/wiki/希尔排序)| `ShellSort` |
-
-### 特殊
-
-|算法|类名|支持类型|
-|-|-|-|
-|[桶排序](https://zh.wikipedia.org/wiki/桶排序)| `BucketSort` | `INumber<T>` (需要设计适用于不同数值范围的桶映射) |
-|[计数排序](https://zh.wikipedia.org/wiki/计数排序)| `CountingSort` | `int` |
-|[鸽巢排序](https://zh.wikipedia.org/wiki/鸽巢排序)| `PigeonholeSort` | `int` |
-|[基数排序](https://zh.wikipedia.org/wiki/基数排序)| `RadixSort` | `int` |
+|算法|类名|稳定|支持的类型|
+|-|-|-|-|
+|冒泡排序| `BubbleSort` | `Yes` | `INumber<T>` |
+|桶排序| `BucketSort` | `Yes` | `INumber<T>` |
+|鸡尾酒排序| `CocktailShakerSort` | `Yes` | `INumber<T>` |
+|计数排序| `CountingSort` | `Yes` | `int` |
+|侏儒排序| `GnomeSort` | `Yes` | `INumber<T>` |
+|插入排序| `InsertionSort` | `Yes` | `INumber<T>` |
+|归并排序| `MergeSort` | `Yes` | `INumber<T>` |
+|鸽巢排序| `PigeonholeSort` | `Yes` | `int` |
+|基数排序| `RadixSort` | `Yes` | `int` |
+|梳排序| `CombSort` | `No` | `INumber<T>` |
+|堆排序| `HeapSort` | `No` | `INumber<T>` |
+|快速排序| `QuickSort` | `No` | `INumber<T>` |
+|选择排序| `SelectionSort` | `No` | `INumber<T>` |
+|希尔排序| `ShellSort` | `No` | `INumber<T>` |
