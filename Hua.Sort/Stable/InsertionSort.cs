@@ -8,7 +8,7 @@ public class InsertionSort<T> : ISort<T> where T : INumber<T>
     {
         int i, j;
         T key;
-        for (i = 1; i != array.Length; ++i)
+        for (i = 1; i < array.Length; ++i)
         {
             key = array[i];
             j = i - 1;
