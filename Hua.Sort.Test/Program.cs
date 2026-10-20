@@ -5,7 +5,7 @@ namespace Hua.Sort.Test
 {
     internal class Program
     {
-        static int[] GenerateRandomArray(int length)
+        static int[] GenerateRandomUniqueArray(int length)
         {
             var array = Enumerable.Range(-length / 2, length).ToArray();
             var random = new Random();
@@ -17,6 +17,14 @@ namespace Hua.Sort.Test
             }
 
             return array;
+        }
+
+        static int[] GenerateRandomRepeatedArray(int length)
+        {
+            var random = new Random();
+            return Enumerable.Range(0, length)
+                .Select(_ => random.Next(10))
+                .ToArray();
         }
 
         static IEnumerable<Type> GetSorterTypes()
@@ -50,44 +58,55 @@ namespace Hua.Sort.Test
             throw new InvalidOperationException($"No supported constructor found for {type.FullName}.");
         }
 
+
+
         static void Main(string[] args)
         {
-            var numbers = GenerateRandomArray(10);
-            Console.WriteLine($"Unsorted: {string.Join(", ", numbers)}\n");
+            const int arrayLength = 1000;//<---可修改
+            const int timingRuns = 1000;//<---可修改
+            var randomUniqueArray = GenerateRandomUniqueArray(arrayLength);
 
-            int[][] testCases =
+            int[][] nonTimingTestCases =
             [
-                numbers,
+                GenerateRandomRepeatedArray(arrayLength),
+                Enumerable.Range(1, arrayLength).Reverse().ToArray(),
+                Enumerable.Range(1, arrayLength).ToArray(),
                 [],
-                [42],
-                [3, -1, 3, 0, -1, 2, 2],
-                [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4],
-                [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+                [42]
             ];
 
             foreach (var type in GetSorterTypes())
             {
                 var sorter = CreateSorter(type);
-                foreach (var testCase in testCases)
+                // 可行性测试
+                foreach (var testCase in nonTimingTestCases)
                 {
-                    var expected = (int[])testCase.Clone();
-                    Array.Sort(expected);
                     var copy = (int[])testCase.Clone();
+                    sorter.Sort(copy);
+                }
 
+                //性能测试
+                var expected = (int[])randomUniqueArray.Clone();
+                Array.Sort(expected);
+                var elapsedTicks = new long[timingRuns];
+                for (var i = 0; i < timingRuns; i++)
+                {
+                    var copy = (int[])randomUniqueArray.Clone();
                     var stopwatch = Stopwatch.StartNew();
                     sorter.Sort(copy);
                     stopwatch.Stop();
+                    elapsedTicks[i] = stopwatch.ElapsedTicks;
 
                     if (!copy.SequenceEqual(expected))
                         throw new InvalidOperationException($"{type.Name} produced an incorrectly sorted array.");
-
-                    if (ReferenceEquals(testCase, numbers))
-                    {
-                        var sorterName = type.IsGenericType ? type.GetGenericTypeDefinition().Name : type.Name;
-                        sorterName = sorterName.Split('`')[0];
-                        Console.WriteLine($"{sorterName}[{stopwatch.Elapsed.TotalMilliseconds:F3}ms] {string.Join(", ", copy)}");
-                    }
                 }
+
+                Array.Sort(elapsedTicks);
+                var medianTicks = (elapsedTicks[timingRuns / 2 - 1] + elapsedTicks[timingRuns / 2]) / 2d;
+                var medianMilliseconds = medianTicks * 1000d / Stopwatch.Frequency;
+                var sorterName = type.IsGenericType ? type.GetGenericTypeDefinition().Name : type.Name;
+                sorterName = sorterName.Split('`')[0];
+                Console.WriteLine($"{sorterName}[{medianMilliseconds:F3}ms]");
             }
         }
     }
