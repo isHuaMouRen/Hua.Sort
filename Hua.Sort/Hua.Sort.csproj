@@ -13,7 +13,7 @@
     <Title>Hua.Sort</Title>
     <Copyright>Copyright (c) 2026 isHuaMouRen</Copyright>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.NUPKG.md</PackageReadmeFile>
     <PackageProjectUrl>https://github/com/isHuaMouRen/Hua.Sort</PackageProjectUrl>
     <RepositoryUrl>https://github/com/isHuaMouRen/Hua.Sort</RepositoryUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -29,7 +29,7 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="..\README.md">
+    <None Include="..\README.NUPKG.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
