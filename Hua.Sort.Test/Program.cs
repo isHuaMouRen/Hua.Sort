@@ -102,8 +102,15 @@ namespace Hua.Sort.Test
                 foreach (var testCase in testCases)
                 {
                     var copy = (T[])testCase.Clone();
+                    var original = (T[])testCase.Clone();
                     var expected = (T[])testCase.Clone();
                     Array.Sort(expected);
+
+                    var sortedCopy = sorter.SortCopy(testCase);
+                    if (!testCase.SequenceEqual(original) || !sortedCopy.SequenceEqual(expected))
+                        throw new InvalidOperationException(
+                            $"{type.Name}<{typeof(T).Name}> failed a copy-sorting test case.");
+
                     sorter.Sort(copy);
 
                     if (!copy.SequenceEqual(expected))

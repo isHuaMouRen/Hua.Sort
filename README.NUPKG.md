@@ -59,6 +59,7 @@ Install-Package Hua.Sort
 引用排序算法所在的命名空间，创建对应排序算法的实例，并调用 `Sort()` 方法即可。
 
 ```csharp
+using Hua.Sort;
 using Hua.Sort.Stable;
 
 static void Main(string[] args)
@@ -79,6 +80,14 @@ static void Main(string[] args)
 ```
 
 上述示例使用 `BubbleSort<int>` 进行冒泡排序。你可以将 `BubbleSort` 替换为其他排序算法对应的类名，以使用不同的排序算法。
+
+如果希望保留原数组，可以调用 `SortCopy()` 对副本排序并获取结果：
+
+```csharp
+int[] sortedNumbers = sorter.SortCopy(numbers);
+```
+
+`SortCopy()` 不会修改 `numbers`。
 
 若算法支持，可以将 `<int>` 替换为其他支持的类型 *( `double` , `float` , `long` ...)* 来进行排序，具体哪些算法支持请看下方列表
 
