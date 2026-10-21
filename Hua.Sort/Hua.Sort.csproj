@@ -14,8 +14,8 @@
     <Copyright>Copyright (c) 2026 isHuaMouRen</Copyright>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.NUPKG.md</PackageReadmeFile>
-    <PackageProjectUrl>https://github/com/isHuaMouRen/Hua.Sort</PackageProjectUrl>
-    <RepositoryUrl>https://github/com/isHuaMouRen/Hua.Sort</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/isHuaMouRen/Hua.Sort</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/isHuaMouRen/Hua.Sort</RepositoryUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
