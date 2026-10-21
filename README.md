@@ -75,6 +75,7 @@ static void Main(string[] args)
 |归并排序| `MergeSort` | `Yes` | `INumber<T>` |
 |鸽巢排序| `PigeonholeSort` | `Yes` | `int` |
 |基数排序| `RadixSort` | `Yes` | `int` |
+|Tim排序| `TimSort` | `Yes` | `INumber<T>` |
 |梳排序| `CombSort` | `No` | `INumber<T>` |
 |堆排序| `HeapSort` | `No` | `INumber<T>` |
 |内省排序| `IntroSort` | `No` | `INumber<T>` |
