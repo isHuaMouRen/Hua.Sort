@@ -38,7 +38,7 @@
 |算法|类名|支持的类型|
 |-|-|-|
 |猴子排序| `BogoSort` | `INumber<T>` |
-|奇迹排序| `MiracelSort` | `INumber<T>` |
+|奇迹排序| `MiracleSort` | `INumber<T>` |
 
 ## 使用示例
 
