@@ -75,6 +75,8 @@ namespace Hua.Sort.Test
                 [42]
             ];
 
+            var totalStopwatch = Stopwatch.StartNew();
+
             foreach (var type in GetSorterTypes())
             {
                 var sorter = CreateSorter(type);
@@ -108,6 +110,9 @@ namespace Hua.Sort.Test
                 sorterName = sorterName.Split('`')[0];
                 Console.WriteLine($"{sorterName}[{medianMilliseconds:F3}ms]");
             }
+
+            totalStopwatch.Stop();
+            Console.WriteLine($"\n[Test Completed] Total time taken: {totalStopwatch.Elapsed.TotalMilliseconds:F3}ms");
         }
     }
 }
