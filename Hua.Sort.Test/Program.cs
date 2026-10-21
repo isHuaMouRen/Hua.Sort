@@ -1,13 +1,35 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using Hua.Sort;
 
 namespace Hua.Sort.Test
 {
     internal class Program
     {
-        static int[] GenerateRandomUniqueArray(int length)
+        private static readonly Type[] NumberTypes =
+        [
+            typeof(sbyte),
+            typeof(byte),
+            typeof(short),
+            typeof(ushort),
+            typeof(int),
+            typeof(uint),
+            typeof(long),
+            typeof(ulong),
+            typeof(nint),
+            typeof(nuint),
+            typeof(Int128),
+            typeof(UInt128),
+            typeof(Half),
+            typeof(float),
+            typeof(double),
+            typeof(decimal),
+            typeof(BigInteger)
+        ];
+
+        static T[] GenerateRandomUniqueArray<T>(int length, int start) where T : INumber<T>
         {
-            var array = Enumerable.Range(-length / 2, length).ToArray();
+            var array = Enumerable.Range(start, length).ToArray();
             var random = new Random();
 
             for (int i = array.Length - 1; i > 0; i--)
@@ -16,81 +38,109 @@ namespace Hua.Sort.Test
                 (array[i], array[j]) = (array[j], array[i]);
             }
 
-            return array;
+            return array.Select(T.CreateChecked).ToArray();
         }
 
-        static int[] GenerateRandomRepeatedArray(int length)
+        static T[] GenerateRandomRepeatedArray<T>(int length) where T : INumber<T>
         {
             var random = new Random();
             return Enumerable.Range(0, length)
                 .Select(_ => random.Next(10))
+                .Select(T.CreateChecked)
                 .ToArray();
         }
 
-        static IEnumerable<Type> GetSorterTypes()
+        static IEnumerable<Type> GetSorterTypes<T>() where T : INumber<T>
         {
             return typeof(ISort<>).Assembly
                 .GetTypes()
                 .Where(type =>
                     type.IsClass &&
                     !type.IsAbstract &&
+                    type.IsGenericTypeDefinition &&
                     type.Namespace is "Hua.Sort.Stable" or "Hua.Sort.Unstable")
-                .Select(type => type.IsGenericTypeDefinition
-                    ? type.MakeGenericType(typeof(int))
-                    : type)
                 .Where(type => type.GetInterfaces().Any(interfaceType =>
                     interfaceType.IsGenericType &&
                     interfaceType.GetGenericTypeDefinition() == typeof(ISort<>) &&
-                    interfaceType.GetGenericArguments()[0] == typeof(int)))
+                    interfaceType.GetGenericArguments()[0] == type.GetGenericArguments()[0]))
+                .Select(type => type.MakeGenericType(typeof(T)))
                 .OrderBy(type => type.Name, StringComparer.Ordinal);
         }
 
-        static ISort<int> CreateSorter(Type type)
+        static ISort<T> CreateSorter<T>(Type type) where T : INumber<T>
         {
             var parameterlessConstructor = type.GetConstructor(Type.EmptyTypes);
             if (parameterlessConstructor is not null)
-                return (ISort<int>)parameterlessConstructor.Invoke(null);
+                return (ISort<T>)parameterlessConstructor.Invoke(null);
 
             var intConstructor = type.GetConstructor([typeof(int)]);
             if (intConstructor is not null)
-                return (ISort<int>)intConstructor.Invoke([10]);
+                return (ISort<T>)intConstructor.Invoke([10]);
 
             throw new InvalidOperationException($"No supported constructor found for {type.FullName}.");
         }
 
+        static void RunCorrectnessTests<T>() where T : INumber<T>
+        {
+            const int testArrayLength = 64;
+            var uniqueArrayStart = T.IsNegative(T.CreateSaturating(-1)) ? -testArrayLength / 2 : 0;
+            T[][] testCases =
+            [
+                GenerateRandomRepeatedArray<T>(testArrayLength),
+                GenerateRandomUniqueArray<T>(testArrayLength, uniqueArrayStart),
+                Enumerable.Range(1, testArrayLength).Select(T.CreateChecked).Reverse().ToArray(),
+                Enumerable.Range(1, testArrayLength).Select(T.CreateChecked).ToArray(),
+                Enumerable.Repeat(T.CreateChecked(7), testArrayLength).ToArray(),
+                [],
+                [T.CreateChecked(42)]
+            ];
 
+            foreach (var type in GetSorterTypes<T>())
+            {
+                var sorter = CreateSorter<T>(type);
+
+                foreach (var testCase in testCases)
+                {
+                    var copy = (T[])testCase.Clone();
+                    var expected = (T[])testCase.Clone();
+                    Array.Sort(expected);
+                    sorter.Sort(copy);
+
+                    if (!copy.SequenceEqual(expected))
+                        throw new InvalidOperationException(
+                            $"{type.Name}<{typeof(T).Name}> failed a correctness test case.");
+                }
+            }
+        }
 
         static void Main(string[] args)
         {
             const int arrayLength = 1000;//<---可修改
             const int timingRuns = 1000;//<---可修改
-            var randomUniqueArray = GenerateRandomUniqueArray(arrayLength);
-
-            int[][] nonTimingTestCases =
-            [
-                GenerateRandomRepeatedArray(arrayLength),
-                Enumerable.Range(1, arrayLength).Reverse().ToArray(),
-                Enumerable.Range(1, arrayLength).ToArray(),
-                [],
-                [42]
-            ];
 
             var totalStopwatch = Stopwatch.StartNew();
 
-            foreach (var type in GetSorterTypes())
+            foreach (var numberType in NumberTypes)
             {
-                var sorter = CreateSorter(type);
-                // 可行性测试
-                foreach (var testCase in nonTimingTestCases)
-                {
-                    var copy = (int[])testCase.Clone();
-                    var expectedCase = (int[])testCase.Clone();
-                    Array.Sort(expectedCase);
-                    sorter.Sort(copy);
+                if (!typeof(INumber<>).MakeGenericType(numberType).IsAssignableFrom(numberType))
+                    throw new InvalidOperationException($"{numberType.Name} does not implement INumber<T>.");
 
-                    if (!copy.SequenceEqual(expectedCase))
-                        throw new InvalidOperationException($"{type.Name} failed a non-timing test case.");
-                }
+                typeof(Program)
+                    .GetMethod(nameof(RunCorrectnessTests), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!
+                    .MakeGenericMethod(numberType)
+                    .Invoke(null, null);
+
+                Console.WriteLine($"[Correctness Passed] {numberType.Name}");
+            }
+
+            if (args.Contains("--correctness-only", StringComparer.Ordinal))
+                return;
+
+            var randomUniqueArray = GenerateRandomUniqueArray<int>(arrayLength, -arrayLength / 2);
+
+            foreach (var type in GetSorterTypes<int>())
+            {
+                var sorter = CreateSorter<int>(type);
 
                 //性能测试
                 var expected = (int[])randomUniqueArray.Clone();
@@ -117,7 +167,7 @@ namespace Hua.Sort.Test
             }
 
             totalStopwatch.Stop();
-            Console.WriteLine($"\n[Test Completed] Total time taken: {totalStopwatch.Elapsed.TotalMilliseconds:F3}ms");
+            Console.WriteLine($"\n[Test Completed] Total time taken: {totalStopwatch.Elapsed.TotalSeconds:F3}s");
         }
     }
 }
