@@ -84,7 +84,12 @@ namespace Hua.Sort.Test
                 foreach (var testCase in nonTimingTestCases)
                 {
                     var copy = (int[])testCase.Clone();
+                    var expectedCase = (int[])testCase.Clone();
+                    Array.Sort(expectedCase);
                     sorter.Sort(copy);
+
+                    if (!copy.SequenceEqual(expectedCase))
+                        throw new InvalidOperationException($"{type.Name} failed a non-timing test case.");
                 }
 
                 //性能测试
