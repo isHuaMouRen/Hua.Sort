@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <PackageId>Hua.Sort</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Authors>isHuaMouRen</Authors>
     <Description>C# implementation of various sorting algorithms</Description>
     <Title>Hua.Sort</Title>
