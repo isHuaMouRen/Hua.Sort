@@ -77,6 +77,7 @@ static void Main(string[] args)
 |基数排序| `RadixSort` | `Yes` | `int` |
 |梳排序| `CombSort` | `No` | `INumber<T>` |
 |堆排序| `HeapSort` | `No` | `INumber<T>` |
+|内省排序| `IntroSort` | `No` | `INumber<T>` |
 |快速排序| `QuickSort` | `No` | `INumber<T>` |
 |选择排序| `SelectionSort` | `No` | `INumber<T>` |
 |希尔排序| `ShellSort` | `No` | `INumber<T>` |
