@@ -39,4 +39,8 @@ static void Main(string[] args)
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
 ```
 
-若算法支持，可以将 `<int>` 替换为其他支持的类型 *( `double` , `float` , `long` ...)* 来进行排序，要想查看算法支持的类型，请查看[完整列表](/docs/Sorters.md)
+若算法支持，可以将 `<int>` 替换为其他支持的类型 *( `double` , `float` , `long` ...)* 来进行排序
+
+## 文档
+
+**Hua. Sort** 提供了一个完整的文档来帮助你使用，请前往 [文档索引](/docs/index.md)
